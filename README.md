@@ -2,11 +2,12 @@
     <h1>:dart: Feynman-Kac Diffusion Steering 🚀 📈 🌈</h1>
     <h3><i>A general framework for inference-time scaling and steering of diffusion models with arbitrary rewards.</i></h3>
 
-[![arXiv](Coming Soon)](broken)
+[![arXiv](https://img.shields.io/badge/arXiv-2501.06848-red.svg)](https://arxiv.org/abs/2501.06848)
+
 </div>
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/fk_steering_prompt_adherence.png" alt="Samples generated with Feynman-Kac steering" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/fk_steering_prompt_adherence.png" alt="Samples generated with Feynman-Kac steering" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 # Overview
@@ -25,7 +26,7 @@
 ## How It Works
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/method.png" alt="Process of FK steering" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/method.png" alt="Process of FK steering" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ### 1. What is steering?
@@ -40,7 +41,7 @@ Steering focuses on generating samples with **high user-defined rewards**, such 
 It’s up to you to define what “reward” means!
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/steering.png" alt="Steering equation" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/steering.png" alt="Steering equation" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ### 2. What is FK Steering?
@@ -65,23 +66,23 @@ Our experiments showcase the trade-offs between these choices, so you can pick w
 ### Improves Sample Quality for Image and Text Diffusion Models
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/gen_eval_scaling.png" alt="GenEval scores" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/gen_eval_scaling.png" alt="GenEval scores" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/particle_scaling.png" alt="Particle scaling" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/particle_scaling.png" alt="Particle scaling" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ### Diffusion models can struggle with prompt adherence...
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/gary_marcus.png" alt="Quality comparison with FK Steering" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/gary_marcus.png" alt="Quality comparison with FK Steering" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ### ...but FK Steering can help!
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/better_unicorns.png" alt="High-reward steering with FK" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/better_unicorns.png" alt="High-reward steering with FK" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ---
@@ -95,13 +96,46 @@ FK Steering is versatile, enabling the generation of rare attributes even withou
 This capability is valuable for tasks like **red-teaming**, steering models for **responsible AI**, and fine-tuning.
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/toxicity.png" alt="Toxicity steering results with FK" style="display: block; max-width: 600px; height: auto;">
+    <img src="images/toxicity.png" alt="Toxicity steering results with FK" style="display: block; max-width: 400px; height: auto;">
 </div>
 
 ---
 
 # Code
 
-Coming **very** soon.
+## Installation
 
----
+Dependencies can be installed with:
+
+```bash
+pip install -r requirements.txt
+```
+
+Python 3.9+ recommended.
+
+## Structure
+
+- [**text_to_image/fkd_diffusers**](./text_to_image/fkd_diffusers): Code for using FK Steering alongside Hugging Face's [diffusers library](https://github.com/huggingface/diffusers).
+
+- [**text_to_image/playground_fksteering.ipynb**](./text_to_image/playground_fksteering.ipynb): A notebook for experimenting with FK Steering.
+
+- [**text_to_image/generate_samples_for_paper.py**](./text_to_image/generate_samples_for_paper.py): Script for generating the image samples used in the paper.
+
+- [**text_to_image/launch_eval_runs.py**](./text_to_image/launch_eval_runs.py): Script for running the text-to-image evaluations.
+
+- **Text diffusion Code**: *Coming soon*
+- **ImageNet Class-Conditional Code**: *Coming soon*
+
+# Citation
+
+
+```bibtex
+@misc{singhal2025generalframeworkinferencetimescaling,
+      title={A General Framework for Inference-time Scaling and Steering of Diffusion Models}, 
+      author={Raghav Singhal and Zachary Horvitz and Ryan Teehan and Mengye Ren and Zhou Yu and Kathleen McKeown and Rajesh Ranganath},
+      year={2025},
+      eprint={2501.06848},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2501.06848}, 
+}
