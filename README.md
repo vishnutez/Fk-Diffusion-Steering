@@ -7,7 +7,7 @@
 </div>
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/fk_steering_prompt_adherence.png" alt="Samples generated with Feynman-Kac steering" style="width: 600px;">
+    <img src="images/fk_steering_prompt_adherence.png" alt="Samples generated with Feynman-Kac steering" style="width: 700px;">
 </div>
 
 # Overview
@@ -26,7 +26,7 @@
 ## How It Works
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/method.png" alt="Process of FK steering" style="width: 600px;">
+    <img src="images/method.png" alt="Process of FK steering" style="width: 700px;">
 </div>
 
 ### 1. What is steering?
@@ -41,7 +41,7 @@ Steering focuses on generating samples with **high user-defined rewards**, such 
 It’s up to you to define what “reward” means!
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/steering.png" alt="Steering equation" style="width: 600px;">
+    <img src="images/steering.png" alt="Steering equation" style="width: 500px;">
 </div>
 
 ### 2. What is FK Steering?
@@ -66,11 +66,11 @@ Our experiments showcase the trade-offs between these choices, so you can pick w
 ### Improves Sample Quality for Image and Text Diffusion Models
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/gen_eval_scaling.png" alt="GenEval scores" style="width: 600px;">
+    <img src="images/gen_eval_scaling.png" alt="GenEval scores" style="width: 700px;">
 </div>
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/particle_scaling.png" alt="Particle scaling" style="width: 600px;">
+    <img src="images/particle_scaling.png" alt="Particle scaling" style="width: 700px;">
 </div>
 
 ### Diffusion models can struggle with prompt adherence...
@@ -82,7 +82,7 @@ Our experiments showcase the trade-offs between these choices, so you can pick w
 ### ...but FK Steering can help!
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/better_unicorns.png" alt="High-reward steering with FK" style="width: 600px;">
+    <img src="images/better_unicorns.png" alt="High-reward steering with FK" style="width: 900px;">
 </div>
 
 ---
@@ -96,7 +96,7 @@ FK Steering is versatile, enabling the generation of rare attributes even withou
 This capability is valuable for tasks like **red-teaming**, steering models for **responsible AI**, and fine-tuning.
 
 <div align="center" style="border: 2px solid black; display: inline-block;">
-    <img src="images/toxicity.png" alt="Toxicity steering results with FK" style="width: 600px;">
+    <img src="images/toxicity.png" alt="Toxicity steering results with FK" style="width: 700px;">
 </div>
 
 ---
@@ -127,6 +127,7 @@ Python 3.9+ recommended.
 - **ImageNet Class-Conditional Code**: *Coming soon*
 
 # Citation
+
 
 ```bibtex
 @misc{singhal2025generalframeworkinferencetimescaling,
