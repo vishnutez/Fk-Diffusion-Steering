@@ -14,10 +14,10 @@ from fks_utils import get_model, do_eval
 
 
 args = dict(
-    output_dir="samples_for_paper_llm_grader",
+    output_dir="samples_for_paper",
     eta=1.0,
-    guidance_reward_fn="LLMGrader",
-    metrics_to_compute="LLMGrader",
+    guidance_reward_fn="ImageReward",
+    metrics_to_compute="ImageReward",
     seed=42,
 )
 
@@ -28,7 +28,7 @@ print(args)
 do_eval(
     prompt=["test"],
     images=[Image.new("RGB", (224, 224))],
-    metrics_to_compute=["LLMGrader"],
+    metrics_to_compute=["ImageReward"],
 )
 
 
@@ -46,8 +46,8 @@ def generate_config():
         resample_frequency=20,
         resampling_t_start=20,
         resampling_t_end=80,
-        guidance_reward_fn="LLMGrader",
-        metric_to_chase="consistency_and_cohesion",
+        guidance_reward_fn="ImageReward",
+        metric_to_chase=None, # should be specified when using "LLMGrader".
     )
 
     arr_fkd_args = []
@@ -127,10 +127,10 @@ def generate_samples(fkd_args, pipeline, prompt_data):
         results = do_eval(
             prompt=prompt,
             images=images_fkd_max,
-            metrics_to_compute=["LLMGrader"],
+            metrics_to_compute=["ImageReward"],
         )
         # sort images by reward
-        guidance_reward = np.array(results["LLMGrader"]["result"])
+        guidance_reward = np.array(results["ImageReward"]["result"])
         sorted_idx = np.argsort(guidance_reward)[::-1]
         images_fkd_max = [images_fkd_max[i] for i in sorted_idx]
 
