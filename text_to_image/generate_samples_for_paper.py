@@ -1,3 +1,6 @@
+import sys
+sys.path.append('fkd_diffusers')
+
 import os
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -7,19 +10,14 @@ from copy import deepcopy
 
 import torch
 
-from launch_eval_runs import do_eval
 from fks_utils import get_model, do_eval
-
-import sys
-
-sys.path.append("fkd_diffusers")
 
 
 args = dict(
-    output_dir="samples_for_paper",
+    output_dir="samples_for_paper_llm_grader",
     eta=1.0,
-    guidance_reward_fn="ImageReward",
-    metrics_to_compute="ImageReward",
+    guidance_reward_fn="LLMGrader",
+    metrics_to_compute="LLMGrader",
     seed=42,
 )
 
@@ -30,7 +28,7 @@ print(args)
 do_eval(
     prompt=["test"],
     images=[Image.new("RGB", (224, 224))],
-    metrics_to_compute=["ImageReward"],
+    metrics_to_compute=["LLMGrader"],
 )
 
 
@@ -48,7 +46,8 @@ def generate_config():
         resample_frequency=20,
         resampling_t_start=20,
         resampling_t_end=80,
-        guidance_reward_fn="ImageReward",
+        guidance_reward_fn="LLMGrader",
+        metric_to_chase="consistency_and_cohesion",
     )
 
     arr_fkd_args = []
@@ -128,10 +127,10 @@ def generate_samples(fkd_args, pipeline, prompt_data):
         results = do_eval(
             prompt=prompt,
             images=images_fkd_max,
-            metrics_to_compute=["ImageReward"],
+            metrics_to_compute=["LLMGrader"],
         )
         # sort images by reward
-        guidance_reward = np.array(results["ImageReward"]["result"])
+        guidance_reward = np.array(results["LLMGrader"]["result"])
         sorted_idx = np.argsort(guidance_reward)[::-1]
         images_fkd_max = [images_fkd_max[i] for i in sorted_idx]
 
@@ -164,9 +163,9 @@ def generate_samples(fkd_args, pipeline, prompt_data):
 
 
 prompt_data = [
-    {"prompt": "a photo of a brown knife and a blue donut"},
-    {"prompt": "a photo of a blue clock and a white cup"},
-    {"prompt": "a photo of an orange cow and a purple sandwich"},
+    # {"prompt": "a photo of a brown knife and a blue donut"},
+    # {"prompt": "a photo of a blue clock and a white cup"},
+    # {"prompt": "a photo of an orange cow and a purple sandwich"},
     {"prompt": "a photo of a yellow bird and a black motorcycle"},
     {"prompt": "a photo of a green tennis racket and a black dog"},
     {"prompt": "a green stop sign in a red field"},
@@ -174,21 +173,24 @@ prompt_data = [
 
 
 for model_name in [
-    "stable-diffusion-2-1",
+    # "stable-diffusion-2-1",
     "stable-diffusion-xl",
 ]:
     # load model
     pipeline = get_model(model_name)
 
     # set output directory
+    arr_fkd_args = generate_config()
     output_dir = os.path.join(args.output_dir)
+    output_dir += f"_{args.metrics_to_compute}" 
+    if arr_fkd_args[0]["metric_to_chase"]:
+        output_dir += f'_{arr_fkd_args[0]["metric_to_chase"]}'
     os.makedirs(output_dir, exist_ok=True)
 
     images_path = output_dir + f"/{model_name}"
     os.makedirs(images_path, exist_ok=True)
 
     pipeline = pipeline.to("cuda")
-    arr_fkd_args = generate_config()
 
     # generate samples
     for fkd_args in arr_fkd_args:

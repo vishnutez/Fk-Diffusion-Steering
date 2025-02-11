@@ -5,16 +5,20 @@ import clip
 import hpsv2
 
 from image_reward_utils import rm_load
+from llm_grading import LLMGrader
 
 # Stores the reward models
 REWARDS_DICT = {
     "Clip-Score": None,
     "ImageReward": None,
+    "LLMGrader": None,
 }
 
 
 # Returns the reward function based on the guidance_reward_fn name
-def get_reward_function(reward_name, images, prompts):
+def get_reward_function(reward_name, images, prompts, metric_to_chase="overall_score"):
+    if reward_name != "LLMGrader":
+        print("`metric_to_chase` will be ignored as it only applies to 'LLMGrader' as the `reward_name`")
     if reward_name == "ImageReward":
         return do_image_reward(images=images, prompts=prompts)
     
@@ -23,6 +27,9 @@ def get_reward_function(reward_name, images, prompts):
     
     elif reward_name == "HumanPreference":
         return do_human_preference_score(images=images, prompts=prompts)
+
+    elif reward_name == "LLMGrader":
+        return do_llm_grading(images=images, prompts=prompts, metric_to_chase=metric_to_chase)
     
     else:
         raise ValueError(f"Unknown metric: {reward_name}")
@@ -93,6 +100,19 @@ def do_clip_score(*, images, prompts):
             for i, prompt in enumerate(prompts)
         ]
     return clip_result
+
+
+# Compute LLM-grading
+def do_llm_grading(*, images, prompts, metric_to_chase="overall_score"):
+    global REWARDS_DICT
+    
+    if REWARDS_DICT["LLMGrader"] is None:
+        REWARDS_DICT["LLMGrader"]  = LLMGrader()
+    llm_grading_result = [
+        REWARDS_DICT["LLMGrader"].score(images=images[i], prompts=prompt, metric_to_chase=metric_to_chase)
+        for i, prompt in enumerate(prompts)
+    ]
+    return llm_grading_result
 
 
 '''
