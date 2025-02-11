@@ -173,7 +173,7 @@ prompt_data = [
 
 
 for model_name in [
-    # "stable-diffusion-2-1",
+    "stable-diffusion-2-1",
     "stable-diffusion-xl",
 ]:
     # load model
