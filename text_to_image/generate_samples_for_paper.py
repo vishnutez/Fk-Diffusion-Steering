@@ -163,9 +163,9 @@ def generate_samples(fkd_args, pipeline, prompt_data):
 
 
 prompt_data = [
-    # {"prompt": "a photo of a brown knife and a blue donut"},
-    # {"prompt": "a photo of a blue clock and a white cup"},
-    # {"prompt": "a photo of an orange cow and a purple sandwich"},
+    {"prompt": "a photo of a brown knife and a blue donut"},
+    {"prompt": "a photo of a blue clock and a white cup"},
+    {"prompt": "a photo of an orange cow and a purple sandwich"},
     {"prompt": "a photo of a yellow bird and a black motorcycle"},
     {"prompt": "a photo of a green tennis racket and a black dog"},
     {"prompt": "a green stop sign in a red field"},
