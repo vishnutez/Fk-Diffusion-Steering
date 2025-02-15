@@ -62,11 +62,9 @@ class LLMGrader:
             "overall_score"
         ]
 
-    def score(self, images, prompts, metric_to_chase="overall_score", 
-max_new_tokens=300):
+    def score(self, images, prompts, metric_to_chase="overall_score", max_new_tokens=300):
         if metric_to_chase not in self.supported_metrics:
-            raise ValueError(f"Unknown `{metric_to_chase=}` obtained. 
-Supported ones are: {self.supported_metrics}")
+            raise ValueError(f"Unknown `{metric_to_chase=}` obtained. Supported ones are: {self.supported_metrics}")
         
         images = [images] if not isinstance(images, list) else images
         prompts = [prompts] if not isinstance(prompts, list) else prompts
