@@ -7,8 +7,10 @@ import os
 
 
 class Score(typing.TypedDict):
-    score: float
+    # Order matters!
+    # https://github.com/sayakpaul/tt-scale-flux/pull/7
     explanation: str
+    score: float
 
 
 class Grading(typing.TypedDict):
