@@ -1,3 +1,6 @@
+import sys
+sys.path.append('fkd_diffusers')
+
 import os
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -7,12 +10,7 @@ from copy import deepcopy
 
 import torch
 
-from launch_eval_runs import do_eval
 from fks_utils import get_model, do_eval
-
-import sys
-
-sys.path.append("fkd_diffusers")
 
 
 args = dict(
@@ -49,6 +47,7 @@ def generate_config():
         resampling_t_start=20,
         resampling_t_end=80,
         guidance_reward_fn="ImageReward",
+        metric_to_chase=None, # should be specified when using "LLMGrader".
     )
 
     arr_fkd_args = []
@@ -181,14 +180,17 @@ for model_name in [
     pipeline = get_model(model_name)
 
     # set output directory
+    arr_fkd_args = generate_config()
     output_dir = os.path.join(args.output_dir)
+    output_dir += f"_{args.metrics_to_compute}" 
+    if arr_fkd_args[0]["metric_to_chase"]:
+        output_dir += f'_{arr_fkd_args[0]["metric_to_chase"]}'
     os.makedirs(output_dir, exist_ok=True)
 
     images_path = output_dir + f"/{model_name}"
     os.makedirs(images_path, exist_ok=True)
 
     pipeline = pipeline.to("cuda")
-    arr_fkd_args = generate_config()
 
     # generate samples
     for fkd_args in arr_fkd_args:
