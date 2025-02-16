@@ -48,7 +48,7 @@ The following scripts can be used for generating samples:
 
 - [**run_infinigram_reward.sh**](run_infinigram_reward.sh): InfiniGram perplexity steering (a bit slow!)
 
-- [**run_toxicity_reward.sh**](run_toxicity_reward.sh): Toxicity steering. **WARNING: The results in potentially harmful and offensive outputs.**
+- [**run_toxicity_reward.sh**](run_toxicity_reward.sh): Toxicity steering. **WARNING: Results in potentially harmful and offensive outputs.**
 
 ### Evaluation
 
