@@ -101,33 +101,12 @@ This capability is valuable for tasks like **red-teaming**, steering models for 
 
 ---
 
-# Code
+# Structure
 
-## Installation
-
-Dependencies can be installed with:
-
-```bash
-pip install -r requirements.txt
-```
-
-Python 3.9+ recommended.
-
-## Structure
-
-- [**text_to_image/fkd_diffusers**](./text_to_image/fkd_diffusers): Code for using FK Steering alongside Hugging Face's [diffusers library](https://github.com/huggingface/diffusers).
-
-- [**text_to_image/playground_fksteering.ipynb**](./text_to_image/playground_fksteering.ipynb): A notebook for experimenting with FK Steering.
-
-- [**text_to_image/generate_samples_for_paper.py**](./text_to_image/generate_samples_for_paper.py): Script for generating the image samples used in the paper.
-
-- [**text_to_image/launch_eval_runs.py**](./text_to_image/launch_eval_runs.py): Script for running the text-to-image evaluations.
-
-- **Text diffusion Code**: *Coming soon*
-- **ImageNet Class-Conditional Code**: *Coming soon*
+- Text-to-Image Diffusion: See [**text_to_image**](./text_to_image).
+- Discrete Text Diffusion: See [**discrete_diffusion**](./discrete_diffusion).
 
 # Citation
-
 
 ```bibtex
 @misc{singhal2025generalframeworkinferencetimescaling,
