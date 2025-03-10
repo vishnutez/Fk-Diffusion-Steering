@@ -12,6 +12,16 @@ discrete_diffusion/src/
 text_to_image/fkd_diffusers/train_samples_sdv15/
 discrete_diffusion/mdlm
 
+# Ignore fkd_diffusers/prompt_files
+text_to_image/prompt_files/
+text_to_image/logs/
+hub/
+./src/
+
+text_to_image/samples_for_paper_ImageReward#HumanPreference/
+text_to_image/samples_for_paper/
+
+
 # Distribution / packaging
 .Python
 build/
@@ -175,3 +185,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+

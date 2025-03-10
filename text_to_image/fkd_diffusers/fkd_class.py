@@ -13,6 +13,8 @@ class PotentialType(Enum):
     DIFF = "diff"
     MAX = "max"
     ADD = "add"
+    INSTANT = "instant"
+    CUMM_MAX = "cumm_max"
 
 
 class FKD:
@@ -108,13 +110,20 @@ class FKD:
 
         # Compute importance weights
         if self.potential_type == PotentialType.MAX:
+            # Original code
             w = torch.exp(self.lmbda * torch.max(rs_candidates, self.population_rs))
+        elif self.potential_type == PotentialType.CUMM_MAX:
+            # Corrected code
+            rs_candidates = torch.max(rs_candidates, self.population_rs)
+            w = torch.exp(self.lmbda * rs_candidates)
         elif self.potential_type == PotentialType.ADD:
             rs_candidates = rs_candidates + self.population_rs
             w = torch.exp(self.lmbda * rs_candidates)
         elif self.potential_type == PotentialType.DIFF:
             diffs = rs_candidates - self.population_rs
             w = torch.exp(self.lmbda * diffs)
+        elif self.potential_type == PotentialType.INSTANT:
+            w = torch.exp(self.lmbda * rs_candidates)
         else:
             raise ValueError(f"potential_type {self.potential_type} not recognized")
 

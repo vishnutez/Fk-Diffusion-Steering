@@ -1,0 +1,21 @@
+name: fk-steering
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.13
+  - numpy
+  - pip
+  - c-compiler
+  - cxx-compiler
+  - libgcc
+  - libstdcxx-ng
+  - gxx_linux-64  # Specifically for Linux systems
+  - libopenblas
+  - make
+  - setuptools
+  - wheel
+  - pip
+  - pip:
+    # Add any pip-installed packages here
+    # - some-package-not-available-in-conda

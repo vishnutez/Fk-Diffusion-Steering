@@ -261,7 +261,7 @@ def get_args():
         default="ImageReward#HumanPreference",
         help="# separated list of metrics",
     )
-    parser.add_argument("--prompt_path", type=str, default="geneval_metadata.jsonl")
+    parser.add_argument("--prompt_path", type=str, default="./prompt_files/geneval_metadata.jsonl")
     parser.add_argument("--model_idx", type=int, default=0, help="Used for selecting model and configuration")
 
     parser.add_argument(
@@ -325,13 +325,13 @@ def get_args():
     else:
         raise ValueError(f"Unknown model index {args.model_idx}")
 
-    args.output_dir = args.prompt_path.replace(".json", f"_outputs")
+    args.output_dir = args.prompt_path.replace(".json", f"_outputs_{args.potential_type}")
 
     return args
 
 
 if __name__ == "__main__":
     args = get_args()
-    for seed in [42, 43, 44]:
+    for seed in [42, 43]:  # [42, 43, 44]
         args.seed = seed
         main(args)

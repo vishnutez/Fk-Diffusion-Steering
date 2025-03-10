@@ -95,9 +95,9 @@ def generate_and_save_image(images, image_fpath, num_particles):
 
 
 # per seed per num_particles generate samples
-def generate_samples(fkd_args, pipeline, prompt_data):
-    all_metrics = []
-    for prompt_idx, item in enumerate(prompt_data):
+def generate_samples(fkd_args, pipeline, prompt_data, prompt_idx):
+    metrics = []
+    for item in prompt_data:
         prompt = [item["prompt"]] * fkd_args["num_particles"]
         prompt_ = item["prompt"].replace(" ", "_")
         lmbda_ = fkd_args["lmbda"]
@@ -106,13 +106,13 @@ def generate_samples(fkd_args, pipeline, prompt_data):
         curr_seed = fkd_args["seed"]
 
         # Make directories for each potential type
-        max_dir = os.path.join(images_fpath, "max", prompt_, str(num_particles))
+        max_dir = os.path.join(images_path, "max", prompt_, str(num_particles))
         os.makedirs(max_dir, exist_ok=True)
-        instant_dir = os.path.join(images_fpath, "instant", prompt_, str(num_particles))
+        instant_dir = os.path.join(images_path, "instant", prompt_, str(num_particles))
         os.makedirs(instant_dir, exist_ok=True)
-        add_dir = os.path.join(images_fpath, "add", prompt_, str(num_particles))
+        add_dir = os.path.join(images_path, "add", prompt_, str(num_particles))
         os.makedirs(add_dir, exist_ok=True)
-        base_dir = os.path.join(images_fpath, "base", prompt_, str(num_particles))
+        base_dir = os.path.join(images_path, "base", prompt_, str(num_particles))
         os.makedirs(base_dir, exist_ok=True)
 
         max_fname = os.path.join(max_dir, f"seed_{curr_seed}_max.png")
@@ -128,14 +128,17 @@ def generate_samples(fkd_args, pipeline, prompt_data):
         }
 
         potential_types = ["max", "instant", "add", "base"]
-        for potential_type in potential_types:
+        for potential_seed, potential_type in enumerate(potential_types):
             # This will be the returned in the end
             eval_metrics = {}  # This will store the metrics for each run for each prompt
             eval_metrics["prompt"] = item["prompt"]  # Store the prompt
             eval_metrics["seed"] = fkd_args["seed"]
             eval_metrics["num_particles"] = fkd_args["num_particles"]
 
-            seed_everything(0 + prompt_idx)
+            net_seed = 1000 * curr_seed + 10 * prompt_idx + potential_seed
+            seed_everything(net_seed)
+            eval_metrics["net_seed"] = net_seed
+
             fkd_type_args = deepcopy(fkd_args)
             if potential_type == "base":
                 fkd_type_args["use_smc"] = False
@@ -161,23 +164,36 @@ def generate_samples(fkd_args, pipeline, prompt_data):
             guidance_reward = np.array(results["ImageReward"]["result"])
             sorted_idx = np.argsort(guidance_reward)[::-1]
             images_type_sorted = [images_fkd_type[i] for i in sorted_idx]
+
+            # Get the metrics in the same order
+            image_reward = np.array(results["ImageReward"]["result"])[sorted_idx]
+            hps = np.array(results["HumanPreference"]["result"])[sorted_idx]
+
+            eval_metrics["image_reward"] = image_reward
+            eval_metrics["hps"] = hps
             eval_metrics["potential_type"] = potential_type  # Store the potential type
-            eval_metrics["IR"] = np.array(results["ImageReward"]["result"])  # Store the results for each potential type
-            eval_metrics["HPS"] = np.array(results["HumanPreference"]["result"])  # Store the results for each potential type
             generate_and_save_image(images_type_sorted, potential_to_fname[potential_type], num_particles)
-            all_metrics.append(eval_metrics)
+            metrics.append(eval_metrics)
 
-        return all_metrics
+        return metrics
 
 
-prompt_data = [
-    {"prompt": "a photo of a brown knife and a blue donut"},
-    {"prompt": "a photo of a blue clock and a white cup"},
+# prompt_data = [
+#     {"prompt": "a photo of a brown knife and a blue donut"},
+#     {"prompt": "a photo of a blue clock and a white cup"},
+#     {"prompt": "a photo of an orange cow and a purple sandwich"},
+#     {"prompt": "a photo of a yellow bird and a black motorcycle"},
+#     {"prompt": "a photo of a green tennis racket and a black dog"},
+#     {"prompt": "a green stop sign in a red field"},
+# ]
+
+prompt_data = [{"prompt": "a photo of a blue clock and a white cup"},
     {"prompt": "a photo of an orange cow and a purple sandwich"},
     {"prompt": "a photo of a yellow bird and a black motorcycle"},
     {"prompt": "a photo of a green tennis racket and a black dog"},
     {"prompt": "a green stop sign in a red field"},
 ]
+
 
 
 for model_name in [
@@ -203,10 +219,12 @@ for model_name in [
 
     for fkd_args in arr_fkd_args:
         print(fkd_args)
-        run_metrics = generate_samples(fkd_args, pipeline, prompt_data)
-        metrics.append(run_metrics)  # Get results for each run
+        for idx, prompt in enumerate(prompt_data):
+            print(prompt)
+            run_metrics = generate_samples(fkd_args, pipeline, [prompt], prompt_idx=idx)
+            metrics.append(run_metrics)  # Get results for each run
 
     import pandas as pd
     metrics_df = pd.DataFrame(metrics)
-    metrics_df.to_csv(os.path.join(images_path, "metrics.csv"), index=False)
+    metrics_df.to_csv(os.path.join(images_path, "metrics.csv"), mode='a', header=False, index=False)
     print(f"Saved metrics to {os.path.join(images_path, 'metrics.csv')}")
